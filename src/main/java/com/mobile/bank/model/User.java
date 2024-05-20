@@ -27,6 +27,9 @@ public class User {
     @Column(name = "user_password")
     private String userPassword;
 
+    @Column(name = "user_jurusan")
+    private String userJurusan;
+
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Card> cards;
 }
