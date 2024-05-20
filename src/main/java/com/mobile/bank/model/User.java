@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import java.util.List;
 
 @Entity
 @Table(name = "user")
@@ -13,19 +14,19 @@ import lombok.NoArgsConstructor;
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY )
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id", updatable = false, nullable = false)
-    private Long user_id;
+    private Long userId;
 
     @Column(name = "user_name")
-    private String user_name;
+    private String userName;
 
     @Column(name = "user_username")
-    private String user_username;
+    private String userUsername;
 
     @Column(name = "user_password")
-    private String user_password;
+    private String userPassword;
 
-    @Column(name = "user_balance")
-    private String user_balance;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Card> cards;
 }

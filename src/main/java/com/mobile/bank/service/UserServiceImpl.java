@@ -34,10 +34,9 @@ public class UserServiceImpl implements UserService {
         Optional<User> existingUser = userRepository.findById(id);
         if (existingUser.isPresent()) {
             User userToUpdate = existingUser.get();
-            userToUpdate.setUser_name(user.getUser_name());
-            userToUpdate.setUser_username(user.getUser_username());
-            userToUpdate.setUser_password(user.getUser_password());
-            userToUpdate.setUser_balance(user.getUser_balance());
+            userToUpdate.setUserName(user.getUserName());
+            userToUpdate.setUserUsername(user.getUserUsername());
+            userToUpdate.setUserPassword(user.getUserPassword());
             return userRepository.save(userToUpdate);
         } else {
             return null;
