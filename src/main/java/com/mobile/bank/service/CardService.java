@@ -2,6 +2,7 @@ package com.mobile.bank.service;
 
 import com.mobile.bank.model.Card;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public interface CardService {
@@ -14,4 +15,6 @@ public interface CardService {
     Card updateCardById(Long id, Card card);
 
     List<Card> findAll();
+
+    boolean transferFunds(Long fromCardId, Long toCardId, BigDecimal amount);
 }

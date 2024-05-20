@@ -4,7 +4,9 @@ import com.mobile.bank.model.Card;
 import com.mobile.bank.repository.CardRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -46,5 +48,28 @@ public class CardServiceImpl implements CardService {
     @Override
     public List<Card> findAll() {
         return cardRepository.findAll();
+    }
+
+    @Override
+    @Transactional
+    public boolean transferFunds(Long fromCardId, Long toCardId, BigDecimal amount) {
+        Optional<Card> fromCardOptional = cardRepository.findById(fromCardId);
+        Optional<Card> toCardOptional = cardRepository.findById(toCardId);
+
+        if (fromCardOptional.isPresent() && toCardOptional.isPresent()) {
+            Card fromCard = fromCardOptional.get();
+            Card toCard = toCardOptional.get();
+
+            if (fromCard.getCardBalance().compareTo(amount) >= 0) {
+                fromCard.setCardBalance(fromCard.getCardBalance().subtract(amount));
+                toCard.setCardBalance(toCard.getCardBalance().add(amount));
+
+                cardRepository.save(fromCard);
+                cardRepository.save(toCard);
+
+                return true;
+            }
+        }
+        return false;
     }
 }

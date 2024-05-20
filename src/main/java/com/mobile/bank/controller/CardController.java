@@ -6,7 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/cards")
@@ -51,5 +53,19 @@ public class CardController {
     public ResponseEntity<Void> deleteCard(@PathVariable Long id) {
         cardService.deleteCardById(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/transfer")
+    public ResponseEntity<Void> transferFunds(@RequestBody Map<String, String> transferRequest) {
+        Long fromCardId = Long.valueOf(transferRequest.get("fromCardId"));
+        Long toCardId = Long.valueOf(transferRequest.get("toCardId"));
+        BigDecimal amount = new BigDecimal(transferRequest.get("amount"));
+
+        boolean success = cardService.transferFunds(fromCardId, toCardId, amount);
+        if (success) {
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.badRequest().build();
+        }
     }
 }
