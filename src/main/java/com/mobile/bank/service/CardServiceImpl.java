@@ -23,6 +23,11 @@ public class CardServiceImpl implements CardService {
 
     @Override
     public Card saveCard(Card card) {
+        if (card.getCardId() == null || !cardRepository.existsById(card.getCardId())) {
+            if (cardRepository.findByCardNumber(card.getCardNumber()) != null) {
+                throw new IllegalArgumentException("Card number already exists");
+            }
+        }
         return cardRepository.save(card);
     }
 
@@ -71,5 +76,10 @@ public class CardServiceImpl implements CardService {
             }
         }
         return false;
+    }
+
+    @Override
+    public Card findCardByCardNumber(String cardNumber) {
+        return cardRepository.findByCardNumber(cardNumber);
     }
 }

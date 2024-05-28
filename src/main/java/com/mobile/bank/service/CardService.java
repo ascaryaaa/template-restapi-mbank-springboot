@@ -17,4 +17,6 @@ public interface CardService {
     List<Card> findAll();
 
     boolean transferFunds(Long fromCardId, Long toCardId, BigDecimal amount);
+
+    Card findCardByCardNumber(String cardNumber); // New method declaration
 }

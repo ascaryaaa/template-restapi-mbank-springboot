@@ -33,6 +33,10 @@ public class User {
     @Column(name = "user_jurusan", nullable = false)
     private String userJurusan;
 
+    @Column(name = "user_profile_picture", nullable = false)
+    private String userProfilePicture;
+
+
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     @ToString.Exclude  // Prevents infinite recursion in toString()

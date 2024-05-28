@@ -35,8 +35,12 @@ public class CardController {
 
     @PostMapping
     public ResponseEntity<Card> createCard(@RequestBody Card card) {
-        Card createdCard = cardService.saveCard(card);
-        return ResponseEntity.ok(createdCard);
+        try {
+            Card createdCard = cardService.saveCard(card);
+            return ResponseEntity.ok(createdCard);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(null);
+        }
     }
 
     @PutMapping("/{id}")
