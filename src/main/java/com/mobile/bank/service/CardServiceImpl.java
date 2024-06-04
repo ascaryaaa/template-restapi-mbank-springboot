@@ -79,7 +79,32 @@ public class CardServiceImpl implements CardService {
     }
 
     @Override
+    @Transactional
+    public boolean transferFundsCardNumber(String fromCardNumber, String toCardNumber, BigDecimal amount) {
+        Optional<Card> fromCardOptional = cardRepository.findByCardNumber(fromCardNumber);
+        Optional<Card> toCardOptional = cardRepository.findByCardNumber(toCardNumber);
+
+        if (fromCardOptional.isPresent() && toCardOptional.isPresent()) {
+            Card fromCard = fromCardOptional.get();
+            Card toCard = toCardOptional.get();
+
+            if (fromCard.getCardBalance().compareTo(amount) >= 0) {
+                fromCard.setCardBalance(fromCard.getCardBalance().subtract(amount));
+                toCard.setCardBalance(toCard.getCardBalance().add(amount));
+
+                cardRepository.save(fromCard);
+                cardRepository.save(toCard);
+
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+    @Override
     public Card findCardByCardNumber(String cardNumber) {
-        return cardRepository.findByCardNumber(cardNumber);
+        Optional<Card> optionalCard = cardRepository.findByCardNumber(cardNumber);
+        return optionalCard.orElse(null); // Return null if card not found, or the card object otherwise
     }
 }

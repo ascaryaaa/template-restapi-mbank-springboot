@@ -72,4 +72,21 @@ public class CardController {
             return ResponseEntity.badRequest().build();
         }
     }
+
+    @PostMapping("/transferCardNumber")
+    public ResponseEntity<Void> transferFundsCardNumber(@RequestBody Map<String, String> transferRequest) {
+        String fromCardNumber = transferRequest.get("fromCardNumber");
+        String toCardNumber = transferRequest.get("toCardNumber");
+        BigDecimal amount = new BigDecimal(transferRequest.get("amount"));
+
+        boolean success = cardService.transferFundsCardNumber(fromCardNumber, toCardNumber, amount);
+        if (success) {
+            return ResponseEntity.ok().build();
+        } else {
+            // You might want to handle the case where the transfer fails due to insufficient funds
+            // or invalid card numbers differently.
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
 }
